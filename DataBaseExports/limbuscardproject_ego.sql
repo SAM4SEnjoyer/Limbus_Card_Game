@@ -16,29 +16,26 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `cards_in_board`
+-- Table structure for table `ego`
 --
 
-DROP TABLE IF EXISTS `cards_in_board`;
+DROP TABLE IF EXISTS `ego`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `cards_in_board` (
+CREATE TABLE `ego` (
   `Card_ID` int NOT NULL,
-  `Board_ID` int NOT NULL,
-  KEY `Cards_In_Board_board_Board_ID_fk` (`Board_ID`),
-  KEY `Cards_In_Board_cards_Card_ID_fk` (`Card_ID`),
-  CONSTRAINT `Cards_In_Board_board_Board_ID_fk` FOREIGN KEY (`Board_ID`) REFERENCES `board` (`Board_ID`),
-  CONSTRAINT `Cards_In_Board_cards_Card_ID_fk` FOREIGN KEY (`Card_ID`) REFERENCES `cards` (`Card_ID`)
+  KEY `EGO_cards_Card_ID_fk` (`Card_ID`),
+  CONSTRAINT `EGO_cards_Card_ID_fk` FOREIGN KEY (`Card_ID`) REFERENCES `cards` (`Card_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `cards_in_board`
+-- Dumping data for table `ego`
 --
 
-LOCK TABLES `cards_in_board` WRITE;
-/*!40000 ALTER TABLE `cards_in_board` DISABLE KEYS */;
-/*!40000 ALTER TABLE `cards_in_board` ENABLE KEYS */;
+LOCK TABLES `ego` WRITE;
+/*!40000 ALTER TABLE `ego` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ego` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
