@@ -34,6 +34,7 @@ CREATE TABLE `sinners` (
   `Stagger` int NOT NULL,
   `Life` int NOT NULL,
   `abilities` text,
+  `Text` text,
   KEY `Sinners_cards_Card_ID_fk` (`Card_ID`),
   CONSTRAINT `Sinners_cards_Card_ID_fk` FOREIGN KEY (`Card_ID`) REFERENCES `cards` (`Card_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -57,4 +58,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-02 23:57:41
+-- Dump completed on 2024-09-03 17:21:25

@@ -25,6 +25,9 @@ DROP TABLE IF EXISTS `heroes`;
 CREATE TABLE `heroes` (
   `Name` text NOT NULL,
   `Hero_ID` int NOT NULL AUTO_INCREMENT,
+  `Life` int NOT NULL,
+  `Passive` text NOT NULL,
+  `Passive_Text` text NOT NULL,
   PRIMARY KEY (`Hero_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -47,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-02 23:57:41
+-- Dump completed on 2024-09-03 17:21:26

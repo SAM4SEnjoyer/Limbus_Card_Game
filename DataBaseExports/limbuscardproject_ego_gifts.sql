@@ -24,6 +24,10 @@ DROP TABLE IF EXISTS `ego_gifts`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `ego_gifts` (
   `Card_ID` int NOT NULL,
+  `Name` text NOT NULL,
+  `Cost` int NOT NULL,
+  `Ability` text NOT NULL,
+  `Ability_text` text NOT NULL,
   KEY `ego_gifts_cards_Card_ID_fk` (`Card_ID`),
   CONSTRAINT `ego_gifts_cards_Card_ID_fk` FOREIGN KEY (`Card_ID`) REFERENCES `cards` (`Card_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -47,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-02 23:57:40
+-- Dump completed on 2024-09-03 17:21:26

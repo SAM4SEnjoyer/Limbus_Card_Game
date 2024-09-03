@@ -24,8 +24,15 @@ DROP TABLE IF EXISTS `spell`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `spell` (
   `Card_ID` int NOT NULL,
+  `Cost` int NOT NULL,
+  `ability` text NOT NULL,
+  `Name` text NOT NULL,
+  `Text` text NOT NULL,
+  `Hero_ID` int NOT NULL,
   KEY `spell_cards_Card_ID_fk` (`Card_ID`),
-  CONSTRAINT `spell_cards_Card_ID_fk` FOREIGN KEY (`Card_ID`) REFERENCES `cards` (`Card_ID`)
+  KEY `spell_heroes_Hero_ID_fk` (`Hero_ID`),
+  CONSTRAINT `spell_cards_Card_ID_fk` FOREIGN KEY (`Card_ID`) REFERENCES `cards` (`Card_ID`),
+  CONSTRAINT `spell_heroes_Hero_ID_fk` FOREIGN KEY (`Hero_ID`) REFERENCES `heroes` (`Hero_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -47,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-02 23:57:42
+-- Dump completed on 2024-09-03 17:21:26
