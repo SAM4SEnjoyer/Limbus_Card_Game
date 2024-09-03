@@ -59,7 +59,6 @@ def Sinner_Creation():
         sql = "SELECT LAST_INSERT_ID()"
         cursor.execute(sql)
         sinner_id = cursor.fetchone()
-        print(sinner_id)
         sinner_id = sinner_id['LAST_INSERT_ID()']
         sql = "INSERT INTO sinners (Card_ID, Name, Sinner, Cost, Attack, Defense_type, Defense_value, Speed, Stagger, Life, abilities, Text) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         cursor.execute(sql, (sinner_id, name, sinner, cost, atk, def_type, def_value, speed, stagger, life, abilities, text))
@@ -78,7 +77,6 @@ def EGO_Creation():
         passive = request.form['Passive']
         passive_text = request.form['Passive_text']
         target_num = request.form['Target_Number']
-        print(name)
         sql = "INSERT INTO Cards (Name, Card_Type) VALUES (%s, %s)"
         cursor.execute(sql, (name, "EGO"))
         connection.commit()
@@ -90,6 +88,30 @@ def EGO_Creation():
         cursor.execute(sql, (ego_id, name, cost, ability, ability_text, passive, passive_text, sinner, dmg, target_num))
         connection.commit()
     return render_template('EGO_Creation.html')
+
+@app.route('/Spell_Creation', methods=['GET', 'POST'])
+def Spell_Creation():
+    if request.method == 'POST' and request.form['Name'] and request.form['Hero'] and request.form['ability'] and request.form['Text'] and request.form['Cost']:
+        name = request.form['Name']
+        cost = request.form['Cost']
+        ability = request.form['ability']
+        text = request.form['Text']
+        hero = request.form['Hero']
+        sql = "INSERT INTO Cards (Name, Card_Type) VALUES (%s, %s)"
+        cursor.execute(sql, (name, "Spell"))
+        connection.commit()
+        sql = "SELECT LAST_INSERT_ID()"
+        cursor.execute(sql)
+        spell_id = cursor.fetchone()
+        spell_id = spell_id['LAST_INSERT_ID()']
+        sql = "SELECT Hero_ID FROM heroes WHERE Name = %s"
+        cursor.execute(sql, (hero))
+        hero_id = cursor.fetchone()
+        hero_id = hero_id['Hero_ID']
+        sql = "INSERT INTO spell (Card_ID, Cost, ability, Name, Text, Hero_ID) VALUES (%s, %s, %s, %s, %s, %s)"
+        cursor.execute(sql, (spell_id, cost, ability, name, text, hero_id))
+        connection.commit()
+    return render_template('Spell_Creation.html')
 
 
 if __name__ == '__main__':
