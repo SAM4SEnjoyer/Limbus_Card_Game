@@ -19,6 +19,26 @@ cursor = connection.cursor()
 def menu():
     return render_template('menu.html')
 
+@app.route('/Ego_Gift_Creation', methods=['GET', 'POST'])
+def Ego_Gift_Creation():
+
+    if request.method == 'POST' and 'Name' in request.form and 'Cost' in request.form and 'Ability' in request.form and 'Ability_text' in request.form:
+        name = request.form['Name']
+        cost = request.form['Cost']
+        ability = request.form['Ability']
+        Ability_text = request.form['Ability_text']
+        sql = "INSERT INTO Cards (Name, Card_Type) VALUES (%s, %s)"
+        cursor.execute(sql, (name, "EGO_Gift"))
+        connection.commit()
+        sql = "SELECT LAST_INSERT_ID()"
+        cursor.execute(sql)
+        ego_gift_id = cursor.fetchone()
+        ego_gift_id = ego_gift_id['LAST_INSERT_ID()']
+        sql = "INSERT INTO ego_gifts (Card_ID, Name, Cost, ability, Ability_text) VALUES (%s, %s, %s, %s, %s)"
+        cursor.execute(sql,(ego_gift_id, name, cost, ability, Ability_text))
+        connection.commit()
+    return render_template('Ego_Gift_Creation.html')
+
 @app.route('/Sinner_Creation', methods=['GET', 'POST'])
 def Sinner_Creation():
     if request.method == 'POST' and request.form['Name'] and request.form['Sinner'] and request.form['Cost'] and request.form['Attack'] and request.form['Speed'] and request.form['Defense_type'] and request.form['Defense_value'] and request.form['Stagger'] and request.form['Life']:
