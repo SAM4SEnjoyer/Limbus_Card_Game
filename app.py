@@ -16,36 +16,9 @@ connection = pymysql.connect(
 cursor = connection.cursor()
 
 @app.route('/')
-def hello_world():  # put application's code here
-    return 'Hello World!'
+def menu():  # put application's code here
+    return render_template('menu.html')
 
-
-@app.route('/Sinner_Creation', methods=['GET', 'POST'])
-def Sinner_Creation():
-    if request.method == 'POST' and request.form['Name'] and request.form['Sinner'] and request.form['Cost'] and request.form['Attack'] and request.form['Speed'] and request.form['Defense_type'] and request.form['Defense_value'] and request.form['Stagger'] and request.form['Life']:
-        name = request.form['Name']
-        sinner = request.form['Sinner']
-        cost = request.form['Cost']
-        atk = request.form['Attack']
-        speed = request.form['Speed']
-        def_value = request.form['Defense_value']
-        def_type = request.form['Defense_type']
-        stagger = request.form['Stagger']
-        life = request.form['Life']
-        abilities = request.form['abilities']
-        text = request.form['Text']
-        sql = "INSERT INTO Cards (Name, Card_Type) VALUES (%s, %s)"
-        cursor.execute(sql, (name, "Sinner"))
-        connection.commit()
-        sql = "SELECT LAST_INSERT_ID()"
-        cursor.execute(sql)
-        sinner_id = cursor.fetchone()
-        print(sinner_id)
-        sinner_id = sinner_id['LAST_INSERT_ID()']
-        sql = "INSERT INTO sinners (Card_ID, Name, Sinner, Cost, Attack, Defense_type, Defense_value, Speed, Stagger, Life, abilities, Text) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-        cursor.execute(sql, (sinner_id, name, sinner, cost, atk, def_type, def_value, speed, stagger, life, abilities, text))
-        connection.commit()
-    return render_template('Sinner_Creation.html')
 
 
 if __name__ == '__main__':
