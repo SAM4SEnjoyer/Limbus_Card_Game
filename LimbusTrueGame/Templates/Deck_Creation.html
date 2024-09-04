@@ -25,6 +25,18 @@
             overflow-y: auto;
         }
 
+                .rectangle_deck {
+            background-color: #C98BB9;
+                    Right: 50%;
+            padding: 40px;
+            border-radius: 30px;
+            width: 400px;
+            text-align: center;
+            color: black;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
         .rectangle_login   .conversation-list {
             background-color: #FFFFFF;
             border-radius: 10px;
@@ -91,6 +103,12 @@
                         </div>
                     </div>
                 {% endfor %}
+    </div>
+    <div class="rectangle_deck">
+        <h2>Decks</h2>
+            {% for Deck_Infos in Deck_Info %}
+                <strong>Name :</strong> {{ Deck_Infos.Name }}<br>
+            {%  endfor %}
     </div>
 </body>
 </html>

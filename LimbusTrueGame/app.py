@@ -25,6 +25,7 @@ def Deck_Creation():
     Card_Sinner_Info = []
     Card_Spell_Info = []
     Card_EGO_Info = []
+    Deck_Info = []
 
     sql = f"SELECT * FROM cards"
     cursor.execute(sql)
@@ -60,8 +61,14 @@ def Deck_Creation():
             case _ :
                 print("Skill Issue")
 
+    sql = f"SELECT * FROM decks"
+    cursor.execute(sql)
+    Deck_Info = cursor.fetchall()
 
-    return render_template('Deck_Creation.html', cards_info=cards_info, Card_Spell_Info=Card_Spell_Info, Card_EGO_Info=Card_EGO_Info, Card_Sinner_Info=Card_Sinner_Info, Card_Ego_Gift_Info=Card_Ego_Gift_Info)
+
+
+
+    return render_template('Deck_Creation.html', cards_info=cards_info, Card_Spell_Info=Card_Spell_Info, Card_EGO_Info=Card_EGO_Info, Card_Sinner_Info=Card_Sinner_Info, Card_Ego_Gift_Info=Card_Ego_Gift_Info, Deck_Info=Deck_Info)
 
 @app.route('/Card_viewer', methods=['GET', 'POST'])
 def Card_viewer():
