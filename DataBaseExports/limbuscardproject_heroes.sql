@@ -29,7 +29,7 @@ CREATE TABLE `heroes` (
   `Passive` text NOT NULL,
   `Passive_Text` text NOT NULL,
   PRIMARY KEY (`Hero_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,6 +38,7 @@ CREATE TABLE `heroes` (
 
 LOCK TABLES `heroes` WRITE;
 /*!40000 ALTER TABLE `heroes` DISABLE KEYS */;
+INSERT INTO `heroes` VALUES ('BetaTesteur',1,50,'Exist','Exist');
 /*!40000 ALTER TABLE `heroes` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-03 17:21:26
+-- Dump completed on 2024-09-04 22:11:06

@@ -25,8 +25,12 @@ DROP TABLE IF EXISTS `decks`;
 CREATE TABLE `decks` (
   `Deck_ID` int NOT NULL AUTO_INCREMENT,
   `Number_of_Cards` int NOT NULL,
-  PRIMARY KEY (`Deck_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `Name` text NOT NULL,
+  `Hero_ID` int NOT NULL,
+  PRIMARY KEY (`Deck_ID`),
+  KEY `decks_heroes_Hero_ID_fk` (`Hero_ID`),
+  CONSTRAINT `decks_heroes_Hero_ID_fk` FOREIGN KEY (`Hero_ID`) REFERENCES `heroes` (`Hero_ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -47,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-03 17:21:25
+-- Dump completed on 2024-09-04 22:11:06

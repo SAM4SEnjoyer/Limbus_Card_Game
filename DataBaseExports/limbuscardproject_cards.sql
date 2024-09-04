@@ -27,7 +27,7 @@ CREATE TABLE `cards` (
   `Name` text NOT NULL,
   `Card_Type` text,
   PRIMARY KEY (`Card_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -36,6 +36,7 @@ CREATE TABLE `cards` (
 
 LOCK TABLES `cards` WRITE;
 /*!40000 ALTER TABLE `cards` DISABLE KEYS */;
+INSERT INTO `cards` VALUES (1,'W Corp. Tanguy','Sinner'),(2,'W Corp. Tanguy','Sinner'),(3,'7','Sinner'),(4,'4','Sinner'),(5,'4','EGO'),(6,'4','Spell'),(7,'4','Spell');
 /*!40000 ALTER TABLE `cards` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -48,4 +49,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-03 17:21:25
+-- Dump completed on 2024-09-04 22:11:06
