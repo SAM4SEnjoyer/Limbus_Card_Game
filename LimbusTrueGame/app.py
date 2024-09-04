@@ -37,25 +37,69 @@ def Deck_Creation():
             case "Sinner" :
                 sql = f"SELECT * FROM sinners"
                 cursor.execute(sql)
-                Card_Sinner_Info = Card_Sinner_Info + cursor.fetchall()
+                Card_Sinner_Info = cursor.fetchall()
                 print(Card_Sinner_Info)
 
             case "EGO_Gift" :
                 sql = f"SELECT * FROM ego_gifts"
                 cursor.execute(sql)
-                Card_Ego_Gift_Info = Card_Ego_Gift_Info + cursor.fetchall()
+                Card_Ego_Gift_Info = cursor.fetchall()
                 print(Card_Ego_Gift_Info)
 
             case "EGO" :
                 sql = f"SELECT * FROM ego"
                 cursor.execute(sql)
-                Card_EGO_Info = Card_EGO_Info + cursor.fetchall()
+                Card_EGO_Info = cursor.fetchall()
                 print(Card_EGO_Info)
 
             case "Spell" :
                 sql = f"SELECT * FROM spell"
                 cursor.execute(sql)
-                Card_Spell_Info = Card_Spell_Info + cursor.fetchall()
+                Card_Spell_Info = cursor.fetchall()
+
+            case _ :
+                print("Skill Issue")
+
+
+    return render_template('Deck_Creation.html', cards_info=cards_info, Card_Spell_Info=Card_Spell_Info, Card_EGO_Info=Card_EGO_Info, Card_Sinner_Info=Card_Sinner_Info, Card_Ego_Gift_Info=Card_Ego_Gift_Info)
+
+@app.route('/Card_viewer', methods=['GET', 'POST'])
+def Card_viewer():
+    Card_Ego_Gift_Info = []
+    Card_Sinner_Info = []
+    Card_Spell_Info = []
+    Card_EGO_Info = []
+
+    sql = f"SELECT * FROM cards"
+    cursor.execute(sql)
+    cards_info = cursor.fetchall()
+    print(cards_info)
+
+    for card in cards_info:
+        match card['Card_Type'] :
+
+            case "Sinner" :
+                sql = f"SELECT * FROM sinners"
+                cursor.execute(sql)
+                Card_Sinner_Info = cursor.fetchall()
+                print(Card_Sinner_Info)
+
+            case "EGO_Gift" :
+                sql = f"SELECT * FROM ego_gifts"
+                cursor.execute(sql)
+                Card_Ego_Gift_Info = cursor.fetchall()
+                print(Card_Ego_Gift_Info)
+
+            case "EGO" :
+                sql = f"SELECT * FROM ego"
+                cursor.execute(sql)
+                Card_EGO_Info = cursor.fetchall()
+                print(Card_EGO_Info)
+
+            case "Spell" :
+                sql = f"SELECT * FROM spell"
+                cursor.execute(sql)
+                Card_Spell_Info = cursor.fetchall()
 
             case _ :
                 print("Skill Issue")
