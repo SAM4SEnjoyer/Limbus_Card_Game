@@ -1,5 +1,5 @@
-from flask import Flask, render_template, session, request
 import pymysql
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
@@ -19,139 +19,99 @@ cursor = connection.cursor()
 def menu():
     return render_template('menu.html')
 
-@app.route('/Deck_Creation', methods=['GET', 'POST'])
-def Deck_Creation():
-    Card_Ego_Gift_Info = []
-    Card_Sinner_Info = []
-    Card_Spell_Info = []
-    Card_EGO_Info = []
-    Deck_Info = []
+@app.route('/Ego_Gift_Creation', methods=['GET', 'POST'])
+def Ego_Gift_Creation():
 
-    sql = f"SELECT * FROM cards"
-    cursor.execute(sql)
-    cards_info = cursor.fetchall()
-
-    if not session['Deck_In_Use']:
-
-        sql = f"SELECT * FROM decks"
+    if request.method == 'POST' and 'Name' in request.form and 'Cost' in request.form and 'Ability' in request.form and 'Ability_text' in request.form:
+        name = request.form['Name']
+        cost = request.form['Cost']
+        ability = request.form['Ability']
+        Ability_text = request.form['Ability_text']
+        sql = "INSERT INTO Cards (Name, Card_Type) VALUES (%s, %s)"
+        cursor.execute(sql, (name, "EGO_Gift"))
+        connection.commit()
+        sql = "SELECT LAST_INSERT_ID()"
         cursor.execute(sql)
-        Deck_ID = (cursor.fetchone())['Deck_ID']
-        session['Deck_In_Use'] = Deck_ID
-
-    if 'deck_id_select' in request.form:
-        session['Deck_In_Use'] = request.form['deck_id_select']
-        print(session['Deck_In_Use'])
-
-    if 'card_id_add' in request.form:
-        card_id = request.form['card_id_add']
-        print(card_id)
-        sql = f"INSERT INTO card_in_deck (Card_ID, Deck_ID) VALUES (%s, %s)"
-        cursor.execute(sql, (card_id, session['Deck_In_Use']))
+        ego_gift_id = cursor.fetchone()
+        ego_gift_id = ego_gift_id['LAST_INSERT_ID()']
+        sql = "INSERT INTO ego_gifts (Card_ID, Name, Cost, ability, Ability_text) VALUES (%s, %s, %s, %s, %s)"
+        cursor.execute(sql,(ego_gift_id, name, cost, ability, Ability_text))
         connection.commit()
+    return render_template('Ego_Gift_Creation.html')
 
-    if 'card_id_remove' in request.form:
-        card_id = request.form['card_id_remove']
-        print(card_id)
-        sql = "SELECT card_in_deck_ID FROM card_in_deck WHERE Deck_ID = %s AND Card_ID = %s"
-        cursor.execute(sql, (session['Deck_In_Use'], card_id))
-        card_in_deck = cursor.fetchone()
-        sql = f"DELETE FROM card_in_deck WHERE card_in_deck_ID = %s"
-        cursor.execute(sql, (card_in_deck['card_in_deck_ID'],))
+@app.route('/Sinner_Creation', methods=['GET', 'POST'])
+def Sinner_Creation():
+    if request.method == 'POST' and request.form['Name'] and request.form['Sinner'] and request.form['Cost'] and request.form['Attack'] and request.form['Speed'] and request.form['Defense_type'] and request.form['Defense_value'] and request.form['Stagger'] and request.form['Life']:
+        name = request.form['Name']
+        sinner = request.form['Sinner']
+        cost = request.form['Cost']
+        atk = request.form['Attack']
+        speed = request.form['Speed']
+        def_value = request.form['Defense_value']
+        def_type = request.form['Defense_type']
+        stagger = request.form['Stagger']
+        life = request.form['Life']
+        abilities = request.form['abilities']
+        text = request.form['Text']
+        sql = "INSERT INTO Cards (Name, Card_Type) VALUES (%s, %s)"
+        cursor.execute(sql, (name, "Sinner"))
         connection.commit()
+        sql = "SELECT LAST_INSERT_ID()"
+        cursor.execute(sql)
+        sinner_id = cursor.fetchone()
+        sinner_id = sinner_id['LAST_INSERT_ID()']
+        sql = "INSERT INTO sinners (Card_ID, Name, Sinner, Cost, Attack, Defense_type, Defense_value, Speed, Stagger, Life, abilities, Text) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        cursor.execute(sql, (sinner_id, name, sinner, cost, atk, def_type, def_value, speed, stagger, life, abilities, text))
+        connection.commit()
+    return render_template('Sinner_Creation.html')
 
-    for card in cards_info:
-        match card['Card_Type'] :
+@app.route('/EGO_Creation', methods=['GET', 'POST'])
+def EGO_Creation():
+    if request.method == 'POST' and request.form['Name'] and request.form['Sinner_name'] and request.form['Cost'] and request.form['Damage'] and request.form['Passive'] and request.form['Passive_text'] and request.form['Target_Number']:
+        name = request.form['Name']
+        sinner = request.form['Sinner_name']
+        cost = request.form['Cost']
+        dmg = request.form['Damage']
+        ability = request.form['Ability']
+        ability_text = request.form['Ability_text']
+        passive = request.form['Passive']
+        passive_text = request.form['Passive_text']
+        target_num = request.form['Target_Number']
+        sql = "INSERT INTO Cards (Name, Card_Type) VALUES (%s, %s)"
+        cursor.execute(sql, (name, "EGO"))
+        connection.commit()
+        sql = "SELECT LAST_INSERT_ID()"
+        cursor.execute(sql)
+        ego_id = cursor.fetchone()
+        ego_id = ego_id['LAST_INSERT_ID()']
+        sql = "INSERT INTO ego (Card_ID, Name, Cost, Ability, Ability_text, Passive, Passive_text, Sinner_name, Damage, Target_Number) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        cursor.execute(sql, (ego_id, name, cost, ability, ability_text, passive, passive_text, sinner, dmg, target_num))
+        connection.commit()
+    return render_template('EGO_Creation.html')
 
-            case "Sinner" :
-                sql = f"SELECT * FROM sinners"
-                cursor.execute(sql)
-                Card_Sinner_Info = cursor.fetchall()
-
-            case "EGO_Gift" :
-                sql = f"SELECT * FROM ego_gifts"
-                cursor.execute(sql)
-                Card_Ego_Gift_Info = cursor.fetchall()
-
-            case "EGO" :
-                sql = f"SELECT * FROM ego"
-                cursor.execute(sql)
-                Card_EGO_Info = cursor.fetchall()
-
-            case "Spell" :
-                sql = f"SELECT * FROM spell"
-                cursor.execute(sql)
-                Card_Spell_Info = cursor.fetchall()
-
-            case _ :
-                print("Skill Issue")
-
-    sql = f"SELECT * FROM decks"
-    cursor.execute(sql)
-    Deck_Info = cursor.fetchall()
-
-    sql = f"SELECT Name FROM decks WHERE Deck_ID = %s"
-    cursor.execute(sql, session['Deck_In_Use'])
-    Deck_Name = (cursor.fetchone())['Name']
-
-    sql = f"SELECT Card_ID FROM card_in_deck WHERE Deck_ID = %s"
-    cursor.execute(sql, session['Deck_In_Use'])
-    Deck_List= cursor.fetchall()
-    Deck_Interior = [ids['Card_ID'] for ids in Deck_List]
-    format_strings = ','.join(['%s'] * len(Deck_Interior))
-    sql = f"SELECT * FROM cards WHERE Card_ID IN ({format_strings})"
-    cursor.execute(sql, Deck_Interior)
-    unique_cards = cursor.fetchall()
-    card_dict = {card['Card_ID']: card for card in unique_cards}
-    Deck_Content = [card_dict[card_id] for card_id in Deck_Interior]
-
-
-
-
-    return render_template('Deck_Creation.html', cards_info=cards_info, Card_Spell_Info=Card_Spell_Info, Card_EGO_Info=Card_EGO_Info, Card_Sinner_Info=Card_Sinner_Info, Card_Ego_Gift_Info=Card_Ego_Gift_Info, Deck_Info=Deck_Info, Deck_Name=Deck_Name, Deck_Content=Deck_Content)
-
-@app.route('/Card_viewer', methods=['GET', 'POST'])
-def Card_viewer():
-    Card_Ego_Gift_Info = []
-    Card_Sinner_Info = []
-    Card_Spell_Info = []
-    Card_EGO_Info = []
-
-    sql = f"SELECT * FROM cards"
-    cursor.execute(sql)
-    cards_info = cursor.fetchall()
-    print(cards_info)
-
-    for card in cards_info:
-        match card['Card_Type'] :
-
-            case "Sinner" :
-                sql = f"SELECT * FROM sinners"
-                cursor.execute(sql)
-                Card_Sinner_Info = cursor.fetchall()
-                print(Card_Sinner_Info)
-
-            case "EGO_Gift" :
-                sql = f"SELECT * FROM ego_gifts"
-                cursor.execute(sql)
-                Card_Ego_Gift_Info = cursor.fetchall()
-                print(Card_Ego_Gift_Info)
-
-            case "EGO" :
-                sql = f"SELECT * FROM ego"
-                cursor.execute(sql)
-                Card_EGO_Info = cursor.fetchall()
-                print(Card_EGO_Info)
-
-            case "Spell" :
-                sql = f"SELECT * FROM spell"
-                cursor.execute(sql)
-                Card_Spell_Info = cursor.fetchall()
-
-            case _ :
-                print("Skill Issue")
-
-
-    return render_template('Card_Viewer.html', cards_info=cards_info, Card_Spell_Info=Card_Spell_Info, Card_EGO_Info=Card_EGO_Info, Card_Sinner_Info=Card_Sinner_Info, Card_Ego_Gift_Info=Card_Ego_Gift_Info)
+@app.route('/Spell_Creation', methods=['GET', 'POST'])
+def Spell_Creation():
+    if request.method == 'POST' and request.form['Name'] and request.form['Hero'] and request.form['ability'] and request.form['Text'] and request.form['Cost']:
+        name = request.form['Name']
+        cost = request.form['Cost']
+        ability = request.form['ability']
+        text = request.form['Text']
+        hero = request.form['Hero']
+        sql = "INSERT INTO Cards (Name, Card_Type) VALUES (%s, %s)"
+        cursor.execute(sql, (name, "Spell"))
+        connection.commit()
+        sql = "SELECT LAST_INSERT_ID()"
+        cursor.execute(sql)
+        spell_id = cursor.fetchone()
+        spell_id = spell_id['LAST_INSERT_ID()']
+        sql = "SELECT Hero_ID FROM heroes WHERE Name = %s"
+        cursor.execute(sql, (hero))
+        hero_id = cursor.fetchone()
+        hero_id = hero_id['Hero_ID']
+        sql = "INSERT INTO spell (Card_ID, Cost, ability, Name, Text, Hero_ID) VALUES (%s, %s, %s, %s, %s, %s)"
+        cursor.execute(sql, (spell_id, cost, ability, name, text, hero_id))
+        connection.commit()
+    return render_template('Spell_Creation.html')
 
 
 if __name__ == '__main__':
