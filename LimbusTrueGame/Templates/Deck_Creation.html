@@ -113,7 +113,7 @@
                                 {% endif %}
                             {% endfor %}
                         <form method="POST">
-                                <input type="hidden" name="card_id" value="{{ cards_infos.Card_ID }}">
+                                <input type="hidden" name="card_id_add" value="{{ cards_infos.Card_ID }}">
                                 <button type="submit">Add to Deck</button>
                         </form>
 
@@ -126,12 +126,24 @@
             {% for Deck_Infos in Deck_Info %}
                 <strong>Name :</strong> {{ Deck_Infos.Name }}<br>
                 <strong>Number of cards :</strong> {{ Deck_Infos.Number_of_Cards }}<br>
+                <strong>ID :</strong> {{ Deck_Infos.Deck_ID }}
+                <form method="POST">
+                    <input type="hidden" name="deck_id_select" value="{{ Deck_Infos.Deck_ID }}">
+                    <button type="submit">Select Deck</button>
+                </form>
             {%  endfor %}
+            <div class="entry">
+                <button type="button" onclick="window.location.href='/Deck_Creator';">Create new deck</button>
+            </div>
     </div>
     <div class="rectangle_deck_show">
         <h2>{{Deck_Name}}</h2>
             {% for cards in Deck_Content %}
                 <strong>Name :</strong> {{ cards.Name }}<br>
+                <form method="POST">
+                    <input type="hidden" name="card_id_remove" value="{{ cards.Card_ID }}">
+                    <button type="submit">Remove from Deck</button>
+                </form>
             {%  endfor %}
     </div>
 </body>
