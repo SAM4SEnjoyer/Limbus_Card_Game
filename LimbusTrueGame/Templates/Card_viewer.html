@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+            body {
+            font-family: Roboto, sans-serif;
+            background-color: #FAE3E3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .rectangle_login {
+            background-color: #C98BB9;
+            padding: 40px;
+            border-radius: 30px;
+            width: 400px;
+            text-align: center;
+            color: black;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .rectangle_login   .conversation-list {
+            background-color: #FFFFFF;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .contact label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .rectangle_login h2 {
+            margin-bottom: 40px;
+        }
+</style>
+
+</head>
+<body>
+    <div class="rectangle_login">
+            <h2>Cards</h2>
+                {% for cards_infos in cards_info %}
+                    <div class="conversation">
+                        <div class="conversation-list">
+                            <strong>Name :</strong> {{ cards_infos.Name }}<br>
+                            <strong>Type :</strong> {{ cards_infos.Card_Type }}<br>
+                            {% for Card_Sinner_Infos in Card_Sinner_Info %}
+                                {% if cards_infos.Card_ID == Card_Sinner_Infos.Card_ID %}
+                                    <strong>Cost :</strong> {{ Card_Sinner_Infos.Cost }}<br>
+                                    <strong>Attack :</strong> {{ Card_Sinner_Infos.Attack }}<br>
+                                    <strong>Sinner :</strong> {{ Card_Sinner_Infos.Sinner }}<br>
+                                    <strong>Defense type :</strong> {{ Card_Sinner_Infos.Defense_type }}<br>
+                                    <strong>Defense :</strong> {{ Card_Sinner_Infos.Defense_value }}<br>
+                                    <strong>Life :</strong> {{ Card_Sinner_Infos.Life }}<br>
+                                    <strong>Stagger :</strong> {{ Card_Sinner_Infos.Stagger }}<br>
+                                    <strong>Speed :</strong> {{ Card_Sinner_Infos.Speed }}<br>
+                                    <strong>Text :</strong> {{ Card_Sinner_Infos.Text }}<br>
+                                {% endif %}
+                            {% endfor %}
+                            {% for Card_EGO_Infos in Card_EGO_Info %}
+                                {% if cards_infos.Card_ID == Card_EGO_Infos.Card_ID %}
+                                    <strong>Cost :</strong> {{ Card_EGO_Infos.Cost }}<br>
+                                    <strong>Sinner :</strong> {{ Card_EGO_Infos.Sinner_name }}<br>
+                                    <strong>Ability :</strong> {{ Card_EGO_Infos.Ability_text }}<br>
+                                    <strong>Passive :</strong> {{ Card_EGO_Infos.Passive_text }}<br>
+                                    <strong>Damage :</strong> {{ Card_EGO_Infos.Damage }}<br>
+                                    <strong>Number of targets :</strong> {{ Card_EGO_Infos.Target_Number }}<br>
+                                {% endif %}
+                            {% endfor %}
+                            {% for Card_Spell_Infos in Card_Spell_Info %}
+                                {% if cards_infos.Card_ID == Card_Spell_Infos.Card_ID %}
+                                    <strong>Cost :</strong> {{ Card_Spell_Infos.Cost }}<br>
+                                    <strong>Text :</strong> {{ Card_Spell_Infos.Text }}<br>
+                                {% endif %}
+                            {% endfor %}
+                            {% for Card_Ego_Gift_Infos in Card_Ego_Gift_Info %}
+                                {% if cards_infos.Card_ID == Card_Ego_Gift_Infos.Card_ID %}
+                                    <strong>Cost :</strong> {{ Card_Ego_Gift_Infos.Cost }}<br>
+                                    <strong>Ability :</strong> {{ Card_Ego_Gift_Infos.Ability_text }}<br>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+    </div>
+</body>
+</html>
