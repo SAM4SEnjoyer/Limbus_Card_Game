@@ -37,18 +37,6 @@
             overflow-y: auto;
         }
 
-                        .rectangle_deck_show {
-            background-color: #C98BB9;
-                    Right: 100%;
-            padding: 40px;
-            border-radius: 30px;
-            width: 400px;
-            text-align: center;
-            color: black;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
         .rectangle_login   .conversation-list {
             background-color: #FFFFFF;
             border-radius: 10px;
@@ -126,12 +114,6 @@
             {% for Deck_Infos in Deck_Info %}
                 <strong>Name :</strong> {{ Deck_Infos.Name }}<br>
                 <strong>Number of cards :</strong> {{ Deck_Infos.Number_of_Cards }}<br>
-            {%  endfor %}
-    </div>
-    <div class="rectangle_deck_show">
-        <h2>{{Deck_Name}}</h2>
-            {% for cards in Deck_Content %}
-                <strong>Name :</strong> {{ cards.Name }}<br>
             {%  endfor %}
     </div>
 </body>

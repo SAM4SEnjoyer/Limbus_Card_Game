@@ -25,30 +25,6 @@
             overflow-y: auto;
         }
 
-                .rectangle_deck {
-            background-color: #C98BB9;
-                    Right: 50%;
-            padding: 40px;
-            border-radius: 30px;
-            width: 400px;
-            text-align: center;
-            color: black;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-                        .rectangle_deck_show {
-            background-color: #C98BB9;
-                    Right: 100%;
-            padding: 40px;
-            border-radius: 30px;
-            width: 400px;
-            text-align: center;
-            color: black;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
         .rectangle_login   .conversation-list {
             background-color: #FFFFFF;
             border-radius: 10px;
@@ -112,27 +88,9 @@
                                     <strong>Ability :</strong> {{ Card_Ego_Gift_Infos.Ability_text }}<br>
                                 {% endif %}
                             {% endfor %}
-                        <form method="POST">
-                                <input type="hidden" name="card_id" value="{{ cards_infos.Card_ID }}">
-                                <button type="submit">Add to Deck</button>
-                        </form>
-
                         </div>
                     </div>
                 {% endfor %}
-    </div>
-    <div class="rectangle_deck">
-        <h2>Decks</h2>
-            {% for Deck_Infos in Deck_Info %}
-                <strong>Name :</strong> {{ Deck_Infos.Name }}<br>
-                <strong>Number of cards :</strong> {{ Deck_Infos.Number_of_Cards }}<br>
-            {%  endfor %}
-    </div>
-    <div class="rectangle_deck_show">
-        <h2>{{Deck_Name}}</h2>
-            {% for cards in Deck_Content %}
-                <strong>Name :</strong> {{ cards.Name }}<br>
-            {%  endfor %}
     </div>
 </body>
 </html>
