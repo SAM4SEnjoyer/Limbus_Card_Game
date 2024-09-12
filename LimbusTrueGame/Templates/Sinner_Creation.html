@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sinner Creation Template</title>
+    <style>
+        body {
+            font-family: Roboto, sans-serif;
+            background-color: #FAE3E3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .Center {
+            position: absolute;
+            top: 50%;
+            right: 63%;
+            transform: translateY(-50%);
+            background-color: #C98BB9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+
+        .entry label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .entree_utilisateur input {
+            width: 95%;
+            border-radius: 5px;
+            padding: 7px;
+            border: none;
+        }
+
+        .boutton_connecter button {
+            width: 30%;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #22223B;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #434375;
+        }
+
+        .rectangle_login h2 {
+            margin-bottom: 40px;
+        }
+
+    </style>
+
+
+
+</head>
+<body>
+
+
+
+
+<div class="Center">
+    <form id="formulaire" method="POST" action="/Sinner_Creation">
+            <div class="entry">
+                <label for="Name">card name ?</label>
+                <input type="text" id="Name" name="Name" required>
+            </div>
+
+
+            <div class="entry">
+                <label for="Sinner">card sinner ?</label>
+                <input type="text" id="Sinner" name="Sinner" required>
+            </div>
+
+            <div class="entry">
+                <label for="Cost">card cost ?</label>
+                <input type="text" id="Cost" name="Cost" required>
+            </div>
+
+            <div class="entry">
+                <label for="Attack">card attack ?</label>
+                <input type="text" id="Attack" name="Attack" required>
+            </div>
+
+            <div class="entry">
+                <label for="Defense_type">card defense type ?</label>
+                <input type="text" id="Defense_type" name="Defense_type" required>
+            </div>
+
+            <div class="entry">
+                <label for="Defense_value">card defense value ?</label>
+                <input type="text" id="Defense_value" name="Defense_value" required>
+            </div>
+
+            <div class="entry">
+                <label for="Speed">card speed ?</label>
+                <input type="text" id="Speed" name="Speed" required>
+            </div>
+
+            <div class="entry">
+                <label for="Stagger">card stagger ?</label>
+                <input type="text" id="Stagger" name="Stagger" required>
+            </div>
+
+            <div class="entry">
+                <label for="Life">card life ?</label>
+                <input type="text" id="Life" name="Life" required>
+            </div>
+
+            <div class="entry">
+                <label for="abilities">card abilities ?</label>
+                <input type="text" id="abilities" name="abilities">
+            </div>
+
+            <div class="entry">
+                <label for="Text">card text ?</label>
+                <input type="text" id="Text" name="Text">
+            </div>
+
+            <div class="boutton_connecter">
+                <button type="submit">add</button>
+            </div>
+    </form>
+
+</div>
+
+</body>
+</html>
