@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        body {
+            font-family: Roboto, sans-serif;
+            background-color: #FAE3E3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .rectangle_login {
+            background-color: #C98BB9;
+            padding: 40px;
+            border-radius: 30px;
+            width: 400px;
+            text-align: center;
+            color: black;
+        }
+
+        .entree_utilisateur {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .entree_utilisateur label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .entree_utilisateur input {
+            width: 95%;
+            border-radius: 5px;
+            padding: 7px;
+            border: none;
+        }
+
+        .boutton_connecter button {
+            width: 30%;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #22223B;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #434375;
+        }
+        .rectangle_login h2 {
+            margin-bottom: 40px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="rectangle_login">
+        <h2>What will be the name of your account ?</h2>
+        {% if msg %}
+        <div class="message-succes">{{ msg }}</div>
+        {% endif %}
+        <form action="{{ url_for('Register') }}" method="post">
+            <div class="entree_utilisateur">
+                <label for="Name">Name :</label>
+                <input type="text" id="Name" name="Name" required>
+            </div>
+            <div class="boutton_connecter">
+                <button type="submit">Register</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

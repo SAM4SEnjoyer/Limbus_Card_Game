@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Roboto, sans-serif;
+            background-color: #FAE3E3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .rectangle_login {
+            background-color: #C98BB9;
+            padding: 40px;
+            border-radius: 30px;
+            width: 400px;
+            text-align: center;
+            color: black;
+        }
+
+        .entree_utilisateur {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .entree_utilisateur label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .entree_utilisateur input {
+            width: 95%;
+            border-radius: 5px;
+            padding: 7px;
+            border: none;
+        }
+
+        .boutton_connecter button {
+            width: 30%;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #22223B;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #434375;
+        }
+
+        .pas_de_compte {
+            margin-top: 20px;
+        }
+
+        .pas_de_compte a {
+            color: black;
+            text-decoration: none;
+            display: block;
+        }
+
+        .pas_de_compte a:hover {
+            text-decoration: underline;
+        }
+
+        .rectangle_login h2 {
+            margin-bottom: 40px;
+            color: black;
+            text-decoration: none;
+        }
+
+        .rectangle_login a {
+            color: black;
+            text-decoration: none;
+            cursor: none;
+        }
+
+        .message-succes {
+            color: #22223B;
+            background-color: #2CF6B3;
+            border-color: #2CF6B3;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="rectangle_login">
+        <h2><a href="/">Login</a></h2>
+        {% if msg %}
+        <div class="message-succes">{{ msg }}</div>
+        {% endif %}
+        <form action="{{ url_for('login') }}" method="post">
+            <div class="entree_utilisateur">
+                <label for="Name">Name</label>
+                <input type="text" id="Name" name="Name" required>
+            </div>
+            <div class="boutton_connecter">
+                <button type="submit">Login</button>
+            </div>
+            <div class="pas_de_compte">
+                <a href="{{ url_for('Register') }}">Click here to create one</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Deck set-up</title>
-        <style>
+    <title>Choose a deck</title>
+
+    <style>
             body {
             font-family: Roboto, sans-serif;
             background-color: #FAE3E3;
@@ -69,20 +70,20 @@
     </style>
 </head>
 <body>
-<div class="rectangle_login">
-    <form id="formulaire" method="POST" action="/Deck_Creator">
-            <div class="entry">
-                <label for="Name">Deck name ?</label>
-                <input type="text" id="Name" name="Name" required>
-            </div>
 
-                <h2>Hero choice</h2>
-                    {% for Hero in Hero_List %}
-                            <input type="radio" id="hero{{ Hero.HeroID }}" name="chosen_hero" value="{{ Hero.Hero_ID}}" required>
-                            <label for="hero{{ Hero.Hero_ID }}">{{ Hero.Name }}</label><br>
+    <div class="rectangle_deck">
+        {% if msg %}
+            <div class="message-succes">{{ msg }}</div>
+        {% endif %}
+        <h2>Choose a Deck</h2>
+        <form id="formulaire" method="POST" action="/Choose_Deck">
+                    {% for Deck_Infos in Deck_Info %}
+                            <input type="radio" id="deck_chosen" name="deck_chosen" value="{{ Deck_Infos.Deck_ID}}" required>
+                            <label for="deck_chosen">{{ Deck_Infos.Name }}</label><br>
                     {%  endfor %}
-                    <button type="submit">Create deck</button>
-    </form>
-</div>
+            <button type="submit">Choose</button>
+        </form>
+    </div>
+
 </body>
 </html>

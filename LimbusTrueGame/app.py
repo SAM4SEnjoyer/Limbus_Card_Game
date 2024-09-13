@@ -1,6 +1,8 @@
 from flask import *
 import pymysql
 
+from Functions import draw
+
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'ndio3290fn0r043ç%)=BNde'
@@ -15,9 +17,92 @@ connection = pymysql.connect(
 )
 cursor = connection.cursor()
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
+def login():
+    msg = ''
+    if request.method == 'POST' and 'Name' in request.form:
+        Name = request.form['Name']
+        cursor.execute('SELECT * FROM users WHERE Name = %s',
+                       (Name, ))
+        account = cursor.fetchone()
+        if account:
+            session['Connected'] = True
+            session['Account_Name'] = account['Name']
+            session['Account_ID'] = account['User_ID']
+            return redirect(url_for('menu'))
+        else:
+            msg = 'Wrong name'
+    return render_template('login.html', msg=msg)
+
+
+@app.route('/Register', methods=['GET', 'POST'])
+def Register():
+    msg = ''
+    if request.method == 'POST' and 'Name' in request.form:
+        Name = request.form['Name']
+        cursor.execute('SELECT * FROM users WHERE Name = %s', Name)
+        account = cursor.fetchone()
+        if account:
+            msg = 'This account already exists'
+        else:
+            cursor.execute('INSERT INTO users (Name) VALUES (%s)', (Name))
+            connection.commit()
+            cursor.execute('SELECT * FROM users WHERE Name = %s', Name)
+            account = cursor.fetchone()
+            session['Connected'] = True
+            session['Account_Name'] = account['Name']
+            return redirect(url_for('menu'))
+    return render_template('Register.html', msg=msg)
+
+
+@app.route('/menu')
 def menu():
     return render_template('menu.html')
+
+@app.route('/Choose_Deck', methods=['GET', 'POST'])
+def choose_deck():
+    msg=''
+    if request.method == 'POST' and 'deck_chosen' in request.form:
+        deck_chosen = request.form['deck_chosen']
+        sql = "SELECT * FROM decks WHERE Deck_ID = %s;"
+        cursor.execute(sql, deck_chosen)
+        deck_chosen = cursor.fetchone()
+
+        if deck_chosen['Number_of_Cards'] == 40:
+            sql = "INSERT INTO decks (Name, Hero_ID, Number_of_Cards, Type) VALUES (%s, %s, %s, 'in_game')"
+            cursor.execute(sql, (deck_chosen['Name'], deck_chosen['Hero_ID'], deck_chosen['Number_of_Cards']))
+            connection.commit()
+            return redirect(url_for('play'))
+        else:
+            msg = 'Too many cards or too few cards'
+
+    sql = f"SELECT * FROM decks"
+    cursor.execute(sql)
+    Deck_Info = cursor.fetchall()
+
+    return render_template('Choose_Deck.html', msg=msg, Deck_Info=Deck_Info)
+
+@app.route('/Play', methods=['GET', 'POST'])
+def play():
+    Users_in_Game = []
+    Cards_in_hand = []
+    Cards_in_board = []
+
+    sql = "SELECT * FROM user_in_game WHERE Game_ID = %s;"
+    cursor.execute(sql, 1)
+    Users_in_Game = cursor.fetchall()
+
+    draw()
+
+    sql = "SELECT * FROM cards_in_hand WHERE User_ID = %s;"
+    cursor.execute(sql, session['Account_ID'])
+    Cards_in_hand = cursor.fetchall()
+
+    sql = "SELECT * FROM cards_in_board WHERE User_ID = %s;"
+    cursor.execute(sql, session['Account_ID'])
+    Cards_in_board = cursor.fetchall()
+
+    return render_template('Play.html', Cards_in_hand=Cards_in_hand, Cards_in_board=Cards_in_board, Users_in_Game=Users_in_Game)
 
 @app.route('/Deck_Creation', methods=['GET', 'POST'])
 def Deck_Creation():
@@ -26,12 +111,14 @@ def Deck_Creation():
     Card_Spell_Info = []
     Card_EGO_Info = []
     Deck_Info = []
+    Deck_Content = []
 
     sql = f"SELECT * FROM cards"
     cursor.execute(sql)
     cards_info = cursor.fetchall()
 
-    if not session['Deck_In_Use']:
+
+    if not 'Deck_In_Use' in session.keys():
 
         sql = f"SELECT * FROM decks"
         cursor.execute(sql)
@@ -109,15 +196,14 @@ def Deck_Creation():
     sql = f"SELECT Card_ID FROM card_in_deck WHERE Deck_ID = %s"
     cursor.execute(sql, session['Deck_In_Use'])
     Deck_List= cursor.fetchall()
-    Deck_Interior = [ids['Card_ID'] for ids in Deck_List]
-    format_strings = ','.join(['%s'] * len(Deck_Interior))
-    sql = f"SELECT * FROM cards WHERE Card_ID IN ({format_strings})"
-    cursor.execute(sql, Deck_Interior)
-    unique_cards = cursor.fetchall()
-    card_dict = {card['Card_ID']: card for card in unique_cards}
-    Deck_Content = [card_dict[card_id] for card_id in Deck_Interior]
-
-
+    if Deck_List:
+        Deck_Interior = [ids['Card_ID'] for ids in Deck_List]
+        format_strings = ','.join(['%s'] * len(Deck_Interior))
+        sql = f"SELECT * FROM cards WHERE Card_ID IN ({format_strings})"
+        cursor.execute(sql, Deck_Interior)
+        unique_cards = cursor.fetchall()
+        card_dict = {card['Card_ID']: card for card in unique_cards}
+        Deck_Content = [card_dict[card_id] for card_id in Deck_Interior]
 
 
     return render_template('Deck_Creation.html', cards_info=cards_info, Card_Spell_Info=Card_Spell_Info, Card_EGO_Info=Card_EGO_Info, Card_Sinner_Info=Card_Sinner_Info, Card_Ego_Gift_Info=Card_Ego_Gift_Info, Deck_Info=Deck_Info, Deck_Name=Deck_Name, Deck_Content=Deck_Content)
@@ -130,7 +216,7 @@ def Deck_Creator():
             name = request.form["Name"]
             hero_id = request.form["chosen_hero"]
             print(hero_id)
-            sql = f"INSERT INTO decks (Name, Hero_ID, Number_of_Cards) VALUES (%s, %s, 0)"
+            sql = f"INSERT INTO decks (Name, Hero_ID, Number_of_Cards, Type) VALUES (%s, %s, 0, 'main')"
             cursor.execute(sql, (name, hero_id))
             connection.commit()
             sql = "SELECT LAST_INSERT_ID()"
