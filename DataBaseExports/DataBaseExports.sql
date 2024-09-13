@@ -59,7 +59,7 @@ CREATE TABLE `card_in_deck` (
   KEY `Deck_ID` (`Deck_ID`),
   CONSTRAINT `Card_ID` FOREIGN KEY (`Card_ID`) REFERENCES `cards` (`Card_ID`),
   CONSTRAINT `Deck_ID` FOREIGN KEY (`Deck_ID`) REFERENCES `decks` (`Deck_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=401 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,7 +68,7 @@ CREATE TABLE `card_in_deck` (
 
 LOCK TABLES `card_in_deck` WRITE;
 /*!40000 ALTER TABLE `card_in_deck` DISABLE KEYS */;
-INSERT INTO `card_in_deck` VALUES (5,3,16),(5,3,17),(4,3,20),(4,3,21),(4,1,26),(4,1,27),(4,1,28),(4,1,29),(4,1,30),(5,5,36),(5,5,37),(5,5,38),(5,5,39);
+INSERT INTO `card_in_deck` VALUES (5,3,16),(5,3,17),(4,3,20),(4,3,21),(4,1,29),(4,1,30),(5,5,36),(5,5,37),(5,5,38),(5,5,39),(5,1,43),(5,1,44),(5,1,45),(5,1,46),(5,1,47),(5,1,48),(5,1,49),(5,1,50),(5,1,51),(5,1,52),(5,1,53),(5,1,54),(5,1,55),(5,1,56),(5,1,57),(5,1,58),(5,1,59),(5,1,60),(5,1,61),(5,1,62),(5,1,63),(4,1,64),(4,1,65),(4,1,66),(4,1,67),(4,1,68),(4,1,69),(4,1,70),(4,1,71),(4,1,72),(5,1,73),(5,1,74),(5,1,75),(5,1,76),(5,1,77),(5,1,78),(4,1,79),(4,1,80);
 /*!40000 ALTER TABLE `card_in_deck` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -133,11 +133,13 @@ DROP TABLE IF EXISTS `cards_in_hand`;
 CREATE TABLE `cards_in_hand` (
   `Card_ID` int NOT NULL,
   `Hand_ID` int NOT NULL,
+  `card_in_hand_ID` int NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`card_in_hand_ID`),
   KEY `Cards_In_Hand_cards_Card_ID_fk` (`Card_ID`),
   KEY `Cards_In_Hand_hand_Hand_ID_fk` (`Hand_ID`),
   CONSTRAINT `Cards_In_Hand_cards_Card_ID_fk` FOREIGN KEY (`Card_ID`) REFERENCES `cards` (`Card_ID`),
   CONSTRAINT `Cards_In_Hand_hand_Hand_ID_fk` FOREIGN KEY (`Hand_ID`) REFERENCES `hand` (`Hand_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -165,7 +167,7 @@ CREATE TABLE `decks` (
   PRIMARY KEY (`Deck_ID`),
   KEY `decks_heroes_Hero_ID_fk` (`Hero_ID`),
   CONSTRAINT `decks_heroes_Hero_ID_fk` FOREIGN KEY (`Hero_ID`) REFERENCES `heroes` (`Hero_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -174,7 +176,7 @@ CREATE TABLE `decks` (
 
 LOCK TABLES `decks` WRITE;
 /*!40000 ALTER TABLE `decks` DISABLE KEYS */;
-INSERT INTO `decks` VALUES (1,0,'Bili\'s Deck',1,'1'),(3,0,'Polo\'s Deck',1,'1'),(4,1,'1',NULL,'2'),(5,40,'Emmanuel Macron\'s Deck',1,'main'),(6,40,'Emmanuel Macron\'s Deck',1,'in_game'),(7,40,'Emmanuel Macron\'s Deck',1,'in_game'),(8,40,'Emmanuel Macron\'s Deck',1,'in_game'),(9,40,'Emmanuel Macron\'s Deck',1,'in_game');
+INSERT INTO `decks` VALUES (1,40,'Bili\'s Deck',1,'1'),(3,0,'Polo\'s Deck',1,'1'),(4,1,'1',NULL,'2'),(5,40,'Emmanuel Macron\'s Deck',1,'main');
 /*!40000 ALTER TABLE `decks` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -301,7 +303,7 @@ CREATE TABLE `hand` (
   PRIMARY KEY (`Hand_ID`),
   KEY `Hand___fk` (`User_ID`),
   CONSTRAINT `Hand___fk` FOREIGN KEY (`User_ID`) REFERENCES `users` (`User_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -442,7 +444,7 @@ CREATE TABLE `users` (
   `Name` text NOT NULL,
   `User_ID` int NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`User_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -451,7 +453,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('XxGameMasterxX',1);
+INSERT INTO `users` VALUES ('XxGameMasterxX',1),('MasterMind',2);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -464,4 +466,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-13 17:13:20
+-- Dump completed on 2024-09-13 19:33:36

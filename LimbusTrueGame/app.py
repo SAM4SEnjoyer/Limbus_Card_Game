@@ -1,7 +1,10 @@
+
+
 from flask import *
 import pymysql
 
-from Functions import draw
+
+from Functions import draw, fullClear
 
 app = Flask(__name__)
 
@@ -72,6 +75,16 @@ def choose_deck():
             sql = "INSERT INTO decks (Name, Hero_ID, Number_of_Cards, Type) VALUES (%s, %s, %s, 'in_game')"
             cursor.execute(sql, (deck_chosen['Name'], deck_chosen['Hero_ID'], deck_chosen['Number_of_Cards']))
             connection.commit()
+            sql = "SELECT Card_ID FROM card_in_deck WHERE Deck_ID = %s"
+            cursor.execute(sql, deck_chosen['Deck_ID'])
+            deck_list = cursor.fetchall()
+            sql = "SELECT LAST_INSERT_ID()"
+            cursor.execute(sql)
+            id = cursor.fetchone()['LAST_INSERT_ID()']
+            for card in deck_list:
+                sql = "INSERT INTO card_in_deck (Card_ID, Deck_ID) VALUES (%s, %s)"
+                cursor.execute(sql, (card['Card_ID'], id))
+                connection.commit()
             return redirect(url_for('play'))
         else:
             msg = 'Too many cards or too few cards'
@@ -88,19 +101,23 @@ def play():
     Cards_in_hand = []
     Cards_in_board = []
 
-    sql = "SELECT * FROM user_in_game WHERE Game_ID = %s;"
+    sql = "SELECT * FROM user_in_game WHERE Game_ID = %s"
     cursor.execute(sql, 1)
     Users_in_Game = cursor.fetchall()
 
-    draw()
+    draw(2, "Bili's Deck", 2, cursor, connection)
 
-    sql = "SELECT * FROM cards_in_hand WHERE User_ID = %s;"
-    cursor.execute(sql, session['Account_ID'])
-    Cards_in_hand = cursor.fetchall()
+    if request.method=='POST':
+        fullClear(cursor, connection)
+        redirect(url_for('menu'))
 
-    sql = "SELECT * FROM cards_in_board WHERE User_ID = %s;"
-    cursor.execute(sql, session['Account_ID'])
-    Cards_in_board = cursor.fetchall()
+    # sql = "SELECT * FROM cards_in_hand WHERE User_ID = %s"
+    # cursor.execute(sql, session['Account_ID'])
+    # Cards_in_hand = cursor.fetchall()
+    #
+    # sql = "SELECT * FROM cards_in_board WHERE User_ID = %s"
+    # cursor.execute(sql, session['Account_ID'])
+    # Cards_in_board = cursor.fetchall()
 
     return render_template('Play.html', Cards_in_hand=Cards_in_hand, Cards_in_board=Cards_in_board, Users_in_Game=Users_in_Game)
 
