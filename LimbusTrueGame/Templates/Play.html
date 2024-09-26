@@ -25,9 +25,9 @@
             overflow-y: auto;
         }
 
-                .rectangle_deck {
-            background-color: #C98BB9;
-                    Right: 50%;
+                .rectangle_hand {
+            background-color: #056608;
+            bottom: 0;
             padding: 40px;
             border-radius: 30px;
             width: 400px;
@@ -35,11 +35,12 @@
             color: black;
             max-height: 80vh;
             overflow-y: auto;
+            display: inline-block;
         }
 
-                        .rectangle_deck_show {
-            background-color: #C98BB9;
-                    Right: 100%;
+                        .rectangle_hand_card {
+            background-color: #FFFFFF;
+
             padding: 40px;
             border-radius: 30px;
             width: 400px;
@@ -75,5 +76,12 @@
             <button type="submit">delete all data</button>
         </form>
     </div>
+<div class="rectangle_hand">
+            {% for cards in Cards_in_hand %}
+
+                <strong>Name :</strong> {{ cards.Name }}<br>
+
+            {%  endfor %}
+</div>
 </body>
 </html>

@@ -4,7 +4,7 @@ from flask import *
 import pymysql
 
 
-from Functions import draw, fullClear
+from Functions import draw, fullClear, init
 
 app = Flask(__name__)
 
@@ -85,6 +85,7 @@ def choose_deck():
                 sql = "INSERT INTO card_in_deck (Card_ID, Deck_ID) VALUES (%s, %s)"
                 cursor.execute(sql, (card['Card_ID'], id))
                 connection.commit()
+            session['Deck_Used_ID']=id
             return redirect(url_for('play'))
         else:
             msg = 'Too many cards or too few cards'
@@ -97,7 +98,12 @@ def choose_deck():
 
 @app.route('/Play', methods=['GET', 'POST'])
 def play():
+    init(cursor, connection, session)
+
     Users_in_Game = []
+    sql = f"SELECT Card_ID FROM cards_in_hand WHERE Hand_ID=%s"
+    cursor.execute(sql, session["Hand_Used_ID"])
+
     Cards_in_hand = []
     Cards_in_board = []
 
@@ -105,7 +111,6 @@ def play():
     cursor.execute(sql, 1)
     Users_in_Game = cursor.fetchall()
 
-    draw(2, "Bili's Deck", 2, cursor, connection)
 
     if request.method=='POST':
         fullClear(cursor, connection)
