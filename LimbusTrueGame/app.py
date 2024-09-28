@@ -108,6 +108,7 @@ def play():
     Card_Spell_Info = []
     Card_EGO_Info = []
     Hand_Card_Data = []
+    Cards_in_hand_2 = []
 
 
     if session['Beginning_of_game']:
@@ -131,7 +132,6 @@ def play():
         case "Initialisation":
             init(cursor, connection, session)
             session['Max_Light']=0
-            print(session['Max_Light'])
             sql = "UPDATE Game SET State=%s WHERE Game_ID = %s"
             cursor.execute(sql, ('Upkeep', session['Game_ID']))
             connection.commit()
@@ -168,10 +168,9 @@ def play():
     cursor.execute(sql, session["Hand_Used_ID"])
     Cards_in_hand = cursor.fetchall()
 
-    for cards in Cards_in_hand:
-        sql = "SELECT * FROM cards where Card_ID=%s"
-        cursor.execute(sql, (cards['Card_ID']))
-        Cards_in_hand_2 = cursor.fetchall()
+    sql = "SELECT * FROM cards"
+    cursor.execute(sql)
+    Cards_in_hand_2 = cursor.fetchall()
 
     for cards in Cards_in_hand:
         for card_2 in Cards_in_hand_2:
@@ -223,9 +222,9 @@ def play():
     # cursor.execute(sql, session['Account_ID'])
     # Cards_in_board = cursor.fetchall()
 
-    return render_template('Play.html', Cards_in_hand=Cards_in_hand, Cards_in_board=Cards_in_board, Users_in_Game=Users_in_Game,
+    return render_template('Play.html', Cards_in_hand=Hand_Card_Data, Cards_in_board=Cards_in_board, Users_in_Game=Users_in_Game,
                            Card_Spell_Info=Card_Spell_Info, Card_EGO_Info=Card_EGO_Info, Card_Sinner_Info=Card_Sinner_Info, Card_Ego_Gift_Info=Card_Ego_Gift_Info,
-                           Must_Discard=session['Must_Discard'], Card_in_hand_IDs=Hand_Card_Data)
+                           Must_Discard=session['Must_Discard'])
 
 @app.route('/Deck_Creation', methods=['GET', 'POST'])
 def Deck_Creation():

@@ -17,7 +17,6 @@ def draw(Hand, Deck_ID, Number_of_cards, cursor, connection, session):
         sql = f"SELECT * FROM card_in_deck WHERE Deck_ID=%s"
         cursor.execute(sql, Deck_ID)
         Deck_List = cursor.fetchall()
-        print(Deck_List)
         card = random.choice(Deck_List)
         sql = f"INSERT INTO cards_in_hand (Card_ID, Hand_ID) VALUES (%s,%s)"
         cursor.execute(sql, (card['Card_ID'], Hand))
