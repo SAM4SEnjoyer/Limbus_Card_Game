@@ -54,6 +54,7 @@ def Register():
             account = cursor.fetchone()
             session['Connected'] = True
             session['Account_Name'] = account['Name']
+            session['Account_ID'] = account['User_ID']
             return redirect(url_for('menu'))
     return render_template('Register.html', msg=msg)
 
@@ -93,19 +94,88 @@ def choose_deck():
     sql = f"SELECT * FROM decks"
     cursor.execute(sql)
     Deck_Info = cursor.fetchall()
+    session['Max_Light'] = 0
+    session['Beginning_of_game'] = True
 
     return render_template('Choose_Deck.html', msg=msg, Deck_Info=Deck_Info)
 
 @app.route('/Play', methods=['GET', 'POST'])
 def play():
-    init(cursor, connection, session)
-
-    Users_in_Game = []
-    sql = f"SELECT Card_ID FROM cards_in_hand WHERE Hand_ID=%s"
-    cursor.execute(sql, session["Hand_Used_ID"])
-
     Cards_in_hand = []
+    Cards_in_hand_IDs = []
     Cards_in_board = []
+    Users_in_Game = []
+    Card_Ego_Gift_Info = []
+    Card_Sinner_Info = []
+    Card_Spell_Info = []
+    Card_EGO_Info = []
+
+
+    if session['Beginning_of_game']:
+        session['Beginning_of_game'] = False
+        sql = "INSERT INTO game (State) VALUES (%s)"
+        cursor.execute(sql, 'Initialisation')
+        connection.commit()
+        sql = "SELECT LAST_INSERT_ID()"
+        cursor.execute(sql)
+        session['Game_ID'] = cursor.fetchone()['LAST_INSERT_ID()']
+        sql = "INSERT INTO user_in_game (User_ID, Game_ID) VALUES (%s, %s)"
+        cursor.execute(sql, (session['Account_ID'], session['Game_ID']))
+        connection.commit()
+
+    sql = "SELECT * FROM game WHERE Game_ID = %s"
+    cursor.execute(sql, session['Game_ID'])
+    game = cursor.fetchone()
+
+    match game['State']:
+        case "Initialisation":
+            init(cursor, connection, session)
+            session['Max_Light']=0
+            print(session['Max_Light'])
+        case "Upkeep":
+            draw(cursor, connection, session)
+            session['Max_Light'] = session['Max_Light']+1
+        case "Main":
+            print("main")
+        case _ :
+            print("pop")
+
+
+    sql = f"SELECT * FROM cards_in_hand WHERE Hand_ID=%s"
+    cursor.execute(sql, session["Hand_Used_ID"])
+    Cards_in_hand_IDs = cursor.fetchall()
+
+    for cards in Cards_in_hand_IDs:
+        sql = "SELECT * FROM cards where Card_ID=%s"
+        cursor.execute(sql, cards['Card_ID'])
+        Cards_in_hand = cursor.fetchall() + Cards_in_hand
+
+
+    for cards in Cards_in_hand:
+        match cards['Card_Type'] :
+
+            case "Sinner" :
+                sql = f"SELECT * FROM sinners"
+                cursor.execute(sql)
+                Card_Sinner_Info = cursor.fetchall()
+
+            case "EGO_Gift" :
+                sql = f"SELECT * FROM ego_gifts"
+                cursor.execute(sql)
+                Card_Ego_Gift_Info = cursor.fetchall()
+
+            case "EGO" :
+                sql = f"SELECT * FROM ego"
+                cursor.execute(sql)
+                Card_EGO_Info = cursor.fetchall()
+
+            case "Spell" :
+                sql = f"SELECT * FROM spell"
+                cursor.execute(sql)
+                Card_Spell_Info = cursor.fetchall()
+
+            case _ :
+                print("Skill Issue")
 
     sql = "SELECT * FROM user_in_game WHERE Game_ID = %s"
     cursor.execute(sql, 1)
@@ -124,7 +194,7 @@ def play():
     # cursor.execute(sql, session['Account_ID'])
     # Cards_in_board = cursor.fetchall()
 
-    return render_template('Play.html', Cards_in_hand=Cards_in_hand, Cards_in_board=Cards_in_board, Users_in_Game=Users_in_Game)
+    return render_template('Play.html', Cards_in_hand=Cards_in_hand, Cards_in_board=Cards_in_board, Users_in_Game=Users_in_Game, Card_Spell_Info=Card_Spell_Info, Card_EGO_Info=Card_EGO_Info, Card_Sinner_Info=Card_Sinner_Info, Card_Ego_Gift_Info=Card_Ego_Gift_Info)
 
 @app.route('/Deck_Creation', methods=['GET', 'POST'])
 def Deck_Creation():

@@ -14,6 +14,29 @@
             margin: 0;
         }
 
+        .flex-container {
+            display: flex;           /* Enables flexbox */
+            flex-direction: row;     /* Default: items aligned in a row */
+            justify-content: center; /* Center items horizontally */
+            align-items: flex-start;     /* Center items vertically */
+            height: 55vh;           /* Full viewport height (optional) */
+            width: 100vh;
+            background-color: lightgray; /* Optional: container background */
+            bottom: -25%;
+            position: fixed;
+            overflow-y: scroll;
+            overflow-x: scroll;
+        }
+
+            .flex-item {
+            background-color: coral; /* Item background color */
+            padding: 20px;           /* Space inside each item */
+            margin: 10px;            /* Space between items */
+            color: white;
+            font-size: 0.7rem;
+
+        }
+
         .rectangle_login {
             background-color: #C98BB9;
             padding: 40px;
@@ -25,17 +48,15 @@
             overflow-y: auto;
         }
 
-                .rectangle_hand {
+        .rectangle_hand {
             background-color: #056608;
-            bottom: 0;
             padding: 40px;
             border-radius: 30px;
             width: 400px;
             text-align: center;
             color: black;
             max-height: 80vh;
-            overflow-y: auto;
-            display: inline-block;
+            overflow-x: auto;
         }
 
                         .rectangle_hand_card {
@@ -50,38 +71,83 @@
             overflow-y: auto;
         }
 
-        .rectangle_login   .conversation-list {
-            background-color: #FFFFFF;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        .card-info-grid {
+            display: grid;
+            grid-template-columns: 60px 1fr; /* Adjust the first column width for labels */
+            gap: 2px 5px; /* Row and column gaps */
+        }
+
+        .card-info-grid strong {
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .card-info-grid span {
             text-align: left;
         }
 
-        .contact label {
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .rectangle_login h2 {
-            margin-bottom: 40px;
-        }
     </style>
 
 </head>
 <body>
-<div class="rectangle_login">
+    <div class="rectangle_login">
         <form id="formulaire" method="POST" action="/Play">
             <button type="submit">delete all data</button>
         </form>
     </div>
-<div class="rectangle_hand">
-            {% for cards in Cards_in_hand %}
 
-                <strong>Name :</strong> {{ cards.Name }}<br>
-
-            {%  endfor %}
-</div>
+   <div class="flex-container">
+        {% for cards_infos in Cards_in_hand %}
+            <div class="flex-item">
+                <form method="POST">
+                        <input type="hidden" name="play" value="{{ cards_infos.Card_ID }}">
+                        <button type="submit">Play</button>
+                </form>
+                <div class="card-info-grid">
+                    <strong>Name :</strong> <span>{{ cards_infos.Name }}</span>
+                    <strong>Type :</strong> <span>{{ cards_infos.Card_Type }}</span>
+                    {% for Card_Sinner_Infos in Card_Sinner_Info %}
+                        {% if cards_infos.Card_ID == Card_Sinner_Infos.Card_ID %}
+                            <strong>Cost :</strong> <span>{{ Card_Sinner_Infos.Cost }}</span>
+                            <strong>Attack :</strong> <span>{{ Card_Sinner_Infos.Attack }}</span>
+                            <strong>Sinner :</strong> <span>{{ Card_Sinner_Infos.Sinner }}</span>
+                            <strong>Defense type :</strong> <span>{{ Card_Sinner_Infos.Defense_type }}</span>
+                            <strong>Defense :</strong> <span>{{ Card_Sinner_Infos.Defense_value }}</span>
+                            <strong>Life :</strong> <span>{{ Card_Sinner_Infos.Life }}</span>
+                            <strong>Stagger :</strong> <span>{{ Card_Sinner_Infos.Stagger }}</span>
+                            <strong>Speed :</strong> <span>{{ Card_Sinner_Infos.Speed }}</span>
+                            <strong>Text :</strong> <span>{{ Card_Sinner_Infos.Text }}</span>
+                        {% endif %}
+                    {% endfor %}
+                    {% for Card_EGO_Infos in Card_EGO_Info %}
+                        {% if cards_infos.Card_ID == Card_EGO_Infos.Card_ID %}
+                            <strong>Cost :</strong> <span>{{ Card_EGO_Infos.Cost }}</span>
+                            <strong>Sinner :</strong> <span>{{ Card_EGO_Infos.Sinner_name }}</span>
+                            <strong>Ability :</strong> <span>{{ Card_EGO_Infos.Ability_text }}</span>
+                            <strong>Passive :</strong> <span>{{ Card_EGO_Infos.Passive_text }}</span>
+                            <strong>Damage :</strong> <span>{{ Card_EGO_Infos.Damage }}</span>
+                            <strong>Number of targets :</strong> <span>{{ Card_EGO_Infos.Target_Number }}</span>
+                        {% endif %}
+                    {% endfor %}
+                    {% for Card_Spell_Infos in Card_Spell_Info %}
+                        {% if cards_infos.Card_ID == Card_Spell_Infos.Card_ID %}
+                            <strong>Cost :</strong> <span>{{ Card_Spell_Infos.Cost }}</span>
+                            <strong>Text :</strong> <span>{{ Card_Spell_Infos.Text }}</span>
+                        {% endif %}
+                    {% endfor %}
+                    {% for Card_Ego_Gift_Infos in Card_Ego_Gift_Info %}
+                        {% if cards_infos.Card_ID == Card_Ego_Gift_Infos.Card_ID %}
+                            <strong>Cost :</strong> <span>{{ Card_Ego_Gift_Infos.Cost }}</span>
+                            <strong>Ability :</strong> <span>{{ Card_Ego_Gift_Infos.Ability_text }}</span>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <form method="POST">
+                        <input type="hidden" name="cycle" value="{{ cards_infos.Card_ID }}">
+                        <button type="submit">Cycle</button>
+                </form>
+            </div>
+        {% endfor %}
+    </div>
 </body>
 </html>
