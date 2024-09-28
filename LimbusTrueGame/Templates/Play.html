@@ -146,6 +146,12 @@
                         <input type="hidden" name="cycle" value="{{ cards_infos.Card_ID }}">
                         <button type="submit">Cycle</button>
                 </form>
+                {% if Must_Discard %}
+                        <form method="POST">
+                                <input type="hidden" name="Choice_Discard" value="{{ cards_infos.card_in_hand_ID }}">
+                                <button type="submit">Cycle</button>
+                        </form>
+                {% endif %}
             </div>
         {% endfor %}
     </div>

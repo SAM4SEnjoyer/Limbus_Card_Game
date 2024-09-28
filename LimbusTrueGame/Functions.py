@@ -8,9 +8,11 @@ def init(cursor, connection, session):
     sql=f"SELECT LAST_INSERT_ID()"
     cursor.execute(sql)
     session['Hand_Used_ID'] = cursor.fetchone()["LAST_INSERT_ID()"]
-    draw(session['Hand_Used_ID'], session['Deck_Used_ID'], 5, cursor, connection)
+    session['Number_in_Hand'] = 0
+    draw(session['Hand_Used_ID'], session['Deck_Used_ID'], 5, cursor, connection, session)
 
-def draw(Hand, Deck_ID, Number_of_cards, cursor, connection):
+
+def draw(Hand, Deck_ID, Number_of_cards, cursor, connection, session):
     for i in range(Number_of_cards):
         sql = f"SELECT * FROM card_in_deck WHERE Deck_ID=%s"
         cursor.execute(sql, Deck_ID)
@@ -26,8 +28,14 @@ def draw(Hand, Deck_ID, Number_of_cards, cursor, connection):
         num= cursor.fetchone()["Number_of_Cards"]-1
         sql = f"UPDATE decks SET Number_of_Cards=%s WHERE Deck_ID=%s"
         cursor.execute(sql, (num, Deck_ID))
+        session['Number_in_Hand'] += 1
     connection.commit()
     return True
+
+def discard(Card_ID, cursor, connection):
+    sql = f"DELETE FROM cards_in_hand WHERE card_in_hand_ID=%s"
+    cursor.execute(sql, Card_ID)
+    connection.commit()
 
 def fullClear(cursor, connection):
     sql = f"SELECT Deck_ID FROM decks WHERE Type=%s OR Type=%s"

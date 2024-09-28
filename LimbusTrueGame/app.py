@@ -1,10 +1,8 @@
-
-
 from flask import *
 import pymysql
 
 
-from Functions import draw, fullClear, init
+from Functions import draw, fullClear, init, discard
 
 app = Flask(__name__)
 
@@ -109,9 +107,11 @@ def play():
     Card_Sinner_Info = []
     Card_Spell_Info = []
     Card_EGO_Info = []
+    Hand_Card_Data = []
 
 
     if session['Beginning_of_game']:
+        session['Must_Discard'] = False
         session['Beginning_of_game'] = False
         sql = "INSERT INTO game (State) VALUES (%s)"
         cursor.execute(sql, 'Initialisation')
@@ -132,26 +132,55 @@ def play():
             init(cursor, connection, session)
             session['Max_Light']=0
             print(session['Max_Light'])
+            sql = "UPDATE Game SET State=%s WHERE Game_ID = %s"
+            cursor.execute(sql, ('Upkeep', session['Game_ID']))
+            connection.commit()
         case "Upkeep":
-            draw(cursor, connection, session)
+            draw(session['Hand_Used_ID'], session['Deck_Used_ID'], 1, cursor, connection, session)
             session['Max_Light'] = session['Max_Light']+1
+            session['Light'] = session['Max_Light']
+            sql = "UPDATE Game SET State=%s WHERE Game_ID = %s"
+            cursor.execute(sql, ('Turn_End', session['Game_ID']))
+            connection.commit()
+            # Fin des effets durant husqu'au prochain tour
+            # Déclenchement des effets de début de tour
         case "Main":
             print("main")
+        case "Turn_End":
+            if session['Number_in_Hand']>7:
+                print('Yup')
+                session['Must_Discard'] = True
+                if request.method == 'POST' and 'Choice_Discard' in request.form:
+                    Card_ID = request.form['Choice_Discard']
+                    discard(Card_ID, cursor, connection)
+            else:
+                sql = "UPDATE Game SET State=%s WHERE Game_ID = %s"
+                cursor.execute(sql, ('Upkeep', session['Game_ID']))
+                connection.commit()
+            # Fin des effets de tour
+            # Déclenchement des effets de fin tour
+            # Passer la main
         case _ :
             print("pop")
 
 
     sql = f"SELECT * FROM cards_in_hand WHERE Hand_ID=%s"
     cursor.execute(sql, session["Hand_Used_ID"])
-    Cards_in_hand_IDs = cursor.fetchall()
-
-    for cards in Cards_in_hand_IDs:
-        sql = "SELECT * FROM cards where Card_ID=%s"
-        cursor.execute(sql, cards['Card_ID'])
-        Cards_in_hand = cursor.fetchall() + Cards_in_hand
-
+    Cards_in_hand = cursor.fetchall()
 
     for cards in Cards_in_hand:
+        sql = "SELECT * FROM cards where Card_ID=%s"
+        cursor.execute(sql, (cards['Card_ID']))
+        Cards_in_hand_2 = cursor.fetchall()
+
+    for cards in Cards_in_hand:
+        for card_2 in Cards_in_hand_2:
+            if cards['Card_ID'] == card_2['Card_ID']:
+                Hand_Card_Data.append({**cards, **card_2})
+
+    print(Hand_Card_Data)
+
+    for cards in Hand_Card_Data:
         match cards['Card_Type'] :
 
             case "Sinner" :
@@ -194,7 +223,9 @@ def play():
     # cursor.execute(sql, session['Account_ID'])
     # Cards_in_board = cursor.fetchall()
 
-    return render_template('Play.html', Cards_in_hand=Cards_in_hand, Cards_in_board=Cards_in_board, Users_in_Game=Users_in_Game, Card_Spell_Info=Card_Spell_Info, Card_EGO_Info=Card_EGO_Info, Card_Sinner_Info=Card_Sinner_Info, Card_Ego_Gift_Info=Card_Ego_Gift_Info)
+    return render_template('Play.html', Cards_in_hand=Cards_in_hand, Cards_in_board=Cards_in_board, Users_in_Game=Users_in_Game,
+                           Card_Spell_Info=Card_Spell_Info, Card_EGO_Info=Card_EGO_Info, Card_Sinner_Info=Card_Sinner_Info, Card_Ego_Gift_Info=Card_Ego_Gift_Info,
+                           Must_Discard=session['Must_Discard'], Card_in_hand_IDs=Hand_Card_Data)
 
 @app.route('/Deck_Creation', methods=['GET', 'POST'])
 def Deck_Creation():
